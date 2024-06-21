@@ -6,6 +6,7 @@ from discord.ext import commands
 import random
 from urllib.request import urlopen
 
+
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
@@ -17,6 +18,11 @@ with open("config.json") as f:
 BOT_TOKEN = data["bot-token"]
 CHANNEL_ID = data["channel-id"]
 PREFIX = data["command-prefix"]
+
+#Config data for xmpp
+XMPP_SERVER = data["xmpp-server"]
+XMPP_USER = data["xmpp-username"]
+XMPP_PASS = data["xmpp-password"]
 
 #Who knows why the fuck this is necessary
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
@@ -411,7 +417,14 @@ async def tarot(ctx, amount: int):
 
 
 
+if __name__ == "__main__":
 
-bot.run(BOT_TOKEN)
+    # TODO: 
+    # - add argparser here
+    # - replace print with proper logging
+    # - make 2 threads for both discord and the xmpp bot 
+    # - factor out biscord and xmpp into 2 different classes
+    # - factor out core bot functions to a single unified class
 
-
+    print("Starting chat bot...")
+    bot.run(BOT_TOKEN)
