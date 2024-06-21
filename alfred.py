@@ -13,8 +13,10 @@ from pathlib import Path
 from getpass import getpass
 
 import modules.pokemon as pk
+import backends.xmpp as xmpp
 
-PREFIX = "d"
+# FIXME: fix this.
+PREFIX = "/"
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
 
 
@@ -52,15 +54,15 @@ async def info(ctx):
 @bot.command()
 async def poke(ctx, arg):
 
-    pokeLowerList = open("nameLower.txt", "r")
+    pokeLowerList = open("data/nameLower.txt", "r")
     pokeLowerListDatat = pokeLowerList.read()
     pokeLowerListData = pokeLowerListDatat.split(",")
 
-    pokeList = open("name.txt", "r")
+    pokeList = open("data/name.txt", "r")
     pokeListDatat = pokeList.read()
     pokeListData = pokeListDatat.split(",")
 
-    pokeTypeList = open("type.txt", "r")
+    pokeTypeList = open("data/type.txt", "r")
     pokeTypeDatat = pokeTypeList.read()
     pokeTypeData = pokeTypeDatat.split(",")
 
@@ -151,7 +153,7 @@ async def poke(ctx, arg):
 @bot.command()
 async def tarot(ctx, amount: int):
 
-    tarot = open("tarotDesc.txt", "r")
+    tarot = open("data/tarotDesc.txt", "r")
     tarotDB = tarot.read()
 
     for i in range(amount):
@@ -345,3 +347,17 @@ if __name__ == "__main__":
             XMPP_SERVER = data["xmpp-server"]
             XMPP_USER = data["xmpp-username"]
             XMPP_PASS = data["xmpp-password"]
+
+        jid = "%(name)s@%(server)s" % {"name": XMPP_USER, "server": XMPP_SERVER}
+        logging.debug("Jid is %s" % jid)
+        logging.debug("Password is %s" % XMPP_PASS)
+
+        xmppBot = xmpp.AlfredBotXMPP(jid, XMPP_PASS)
+        xmppBot.register_plugin("xep_0030")  # Service discovery
+        xmppBot.register_plugin("xep_0004")  # Data Forms
+        xmppBot.register_plugin("xep_0060")  # PubSub
+        xmppBot.register_plugin("xep_0199")  # Ping
+
+        # Connect to the xmpp server and run the bot
+        xmppBot.connect()
+        xmppBot.process()

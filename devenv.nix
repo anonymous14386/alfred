@@ -34,7 +34,7 @@
   pre-commit.hooks.black.enable = true;
 
   # https://devenv.sh/processes/
-  processes.alfredbot.exec = "python3.12 alfred.py";
+  processes.alfredbot.exec = "python3.11 alfred.py -x";
 
   # See full reference at https://devenv.sh/reference/options/
 }
