@@ -8,54 +8,19 @@ import random
 
 from discord.ext import commands
 from urllib.request import urlopen
+from argparse import ArgumentParser
+from pathlib import Path
+from getpass import getpass
 
+import modules.pokemon as pk
 
-intents = discord.Intents.default()
-intents.members = True
-intents.message_content = True
-
-# Pull from config
-with open("config.json") as f:
-    data = json.load(f)
-
-BOT_TOKEN = data["bot-token"]
-CHANNEL_ID = data["channel-id"]
-PREFIX = data["command-prefix"]
-
-# Config data for xmpp
-XMPP_SERVER = data["xmpp-server"]
-XMPP_USER = data["xmpp-username"]
-XMPP_PASS = data["xmpp-password"]
-
-# Who knows why the fuck this is necessary
+PREFIX = "d"
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
-bot.remove_command("help")
-
-colorsForTypes = {
-    "Grass": 0x007400,
-    "Poison": 0xC000FF,
-    "Fire": 0xFF0000,
-    "Flying": 0x73A7D6,
-    "Water": 0x0071D8,
-    "Bug": 0x579857,
-    "Normal": 0x767676,
-    "Electric": 0xFFFF00,
-    "Ground": 0x675418,
-    "Fairy": 0xFFC0CB,
-    "Fighting": 0x983838,
-    "Psychic": 0xFF3A9C,
-    "Rock": 0xA17950,
-    "Steel": 0xCCCCCC,
-    "Ice": 0x00FFFF,
-    "Ghost": 0x3D47C6,
-    "Dragon": 0x8087E1,
-    "Dark": 0x3E1F00,
-}
 
 
 @bot.event
 async def on_ready():
-    logging.log(logging.info, "Alfred online on discord!")
+    logging.info("Alfred online on discord!")
     channel = bot.get_channel(CHANNEL_ID)
 
 
@@ -108,8 +73,8 @@ async def poke(ctx, arg):
         pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        typeColor = colorsForTypes[firstType.strip()]
-        image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
+        typeColor = pk.getEmbedColor(firstType.strip())
+        image = pk.getImageUrl(pokeNumberData)
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
             name=pokeListData[query],
@@ -137,8 +102,8 @@ async def poke(ctx, arg):
         pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        typeColor = colorsForTypes[firstType.strip()]
-        image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
+        typeColor = pk.getEmbedColor(firstType.strip())
+        image = pk.getImageUrl(pokeNumberData)
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
             name=pokeListData[query],
@@ -165,8 +130,8 @@ async def poke(ctx, arg):
         pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        typeColor = colorsForTypes[firstType.strip()]
-        image = "https://www.serebii.net/pokemon/art/" + str(pokeNumberData) + ".png"
+        typeColor = pk.getEmbedColor(firstType.strip())
+        image = pk.getImageUrl(pokeNumberData)
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
             name=pokeListData[query],
@@ -306,8 +271,77 @@ if __name__ == "__main__":
     # - make 2 threads for both discord and the xmpp bot
     # - factor out biscord and xmpp into 2 different classes
     # - factor out core bot functions to a single unified class
+    parser = ArgumentParser(description="Test")
+
+    parser.add_argument(
+        "-x",
+        "--xmpp",
+        action="store_const",
+        dest="usexmpp",
+        const=True,
+        default=False,
+        help="Use xmpp instead of discord",
+    )
+    parser.add_argument(
+        "-c",
+        "--config",
+        dest="configPath",
+        default="config.json",
+        help="Path to the config file",
+    )
+    parser.add_argument(
+        "-i",
+        "--interactive",
+        action="store_const",
+        dest="interactive",
+        const=True,
+        default=False,
+        help="Run in interactive mode. This will ask for a username and password",
+    )
+
+    args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG, format="%(levelname)-8s %(message)s")
-    logging.log(logging.info, "Starting alfred bot ...")
+    logging.info("Starting alfred bot ...")
+    logging.debug(args)
 
-    bot.run(BOT_TOKEN)
+    # check if config file exists
+    configfile = Path(args.configPath)
+    logging.debug("Trying to load %s" % configfile)
+    if not configfile.exists():
+        logging.error("Failed to find config file")
+        exit(1)
+
+    # Pull from config
+    with open(configfile) as f:
+        data = json.load(f)
+
+    if not args.usexmpp:
+        intents = discord.Intents.default()
+        intents.members = True
+        intents.message_content = True
+
+        BOT_TOKEN = data["bot-token"]
+        CHANNEL_ID = data["channel-id"]
+        PREFIX = data["command-prefix"]
+
+        # Who knows why the fuck this is necessary
+        bot.remove_command("help")
+        bot.run(BOT_TOKEN)
+    else:
+        logging.info("Running in xmpp mode!")
+
+        with open(configfile) as f:
+            data = json.load(f)
+
+        if args.interactive:
+            logging.info("Running in interactivemode...")
+
+            XMPP_SERVER = input("xmpp-server address: ")
+            XMPP_USER = input("username: ")
+            XMPP_PASS = getpass("Password: ")
+        else:
+            # Config data for xmpp
+            XMPP_SERVER = data["xmpp-server"]
+            XMPP_USER = data["xmpp-username"]
+            XMPP_PASS = data["xmpp-password"]

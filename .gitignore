@@ -10,3 +10,6 @@ devenv.local.nix
 
 # config with secrets 
 config.json
+
+# Ignore the __pycache__
+__pycache__
