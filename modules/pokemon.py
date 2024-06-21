@@ -1,3 +1,6 @@
+import logging
+import random
+
 COLORS_FOR_POKE_TYPES = {
     "Grass": 0x007400,
     "Poison": 0xC000FF,
@@ -34,4 +37,31 @@ def getImageUrl(numberData: str) -> str:
     Returns the url for the image of a pokemon specified
     by the number data
     """
-    return "%(url)s/%(imgNum)s.png" % IMAGE_API_URL, numberData
+    return "%(url)s/%(imgNum)s.png" % {"url": IMAGE_API_URL, "imgNum": numberData}
+
+
+def loadData(dataFolder: str) -> bool:
+    """
+    Load all the text files
+    """
+    pokeLowerList = open("%s/nameLower.txt" % dataFolder, "r")
+
+    pass
+
+
+def getRandomPokemon() -> (str, int):
+    """
+    Get a random pokemon from the pokedex
+    """
+    logging.debug("Getting random pokemon")
+
+    randNum = random.randint(1, 1023)
+    pokeNumberData = str(randNum).zfill(3)
+    query = int(pokeNumberData) - 1
+
+    imgUrl = getImageUrl(pokeNumberData)
+    embedColor = getEmbedColor("grass")
+
+    logging.debug("imgurl %s and embed color %x" % imgUrl, embedColor)
+
+    return (imgUrl, embedColor)
