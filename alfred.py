@@ -105,8 +105,7 @@ async def poke(ctx, arg):
         pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        typeColor = colorsForTypes(firstType.strip())
-
+        typeColor = colorsForTypes[firstType.strip()]
         image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
@@ -135,8 +134,7 @@ async def poke(ctx, arg):
         pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        typeColor = colorsForTypes(firstType.strip())
-
+        typeColor = colorsForTypes[firstType.strip()]
         image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
@@ -164,8 +162,7 @@ async def poke(ctx, arg):
         pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        typeColor = colorsForTypes(firstType.strip())
-
+        typeColor = colorsForTypes[firstType.strip()]
         image = "https://www.serebii.net/pokemon/art/" + str(pokeNumberData) + ".png"
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
