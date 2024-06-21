@@ -5,11 +5,11 @@
   env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = with pkgs; [ 
-    git 
+  packages = [ 
+    pkgs.git 
     # dependencies for the bot
-    python312Packages.discordpy
-    python312Packages.slixmpp
+    pkgs.python312Packages.discordpy
+    pkgs.python312Packages.slixmpp
   ];
 
   # https://devenv.sh/scripts/
