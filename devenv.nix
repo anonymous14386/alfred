@@ -6,10 +6,12 @@
 
   # https://devenv.sh/packages/
   packages = [ 
-    pkgs.git 
+    pkgs.git
+    pkgs.duckdb
     # dependencies for the bot
     pkgs.python311Packages.discordpy
     pkgs.python311Packages.slixmpp
+    pkgs.python311Packages.duckdb
   ];
 
   # https://devenv.sh/scripts/
