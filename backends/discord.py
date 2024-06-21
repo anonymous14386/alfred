@@ -4,7 +4,7 @@ import logging
 import modules.tarot as tr
 
 
-class AlfredBotDiscord(discord.Bot):
+class AlfredBotDiscord(discord.ext.commands.Bot):
     async def on_ready():
         logging.info("Alfred online on discord!")
         channel = bot.get_channel(CHANNEL_ID)
