@@ -16,13 +16,11 @@ import modules.pokemon as pk
 import backends.xmpp as xmpp
 import backends.discord as dc
 
-PREFIX = "~"
 
 if __name__ == "__main__":
-    # TODO:
-    # - make 2 threads for both discord and the xmpp bot
-    # - factor out biscord and xmpp into 2 different classes
-    # - factor out core bot functions to a single unified class
+
+    PREFIX = "~"
+
     parser = ArgumentParser(description="Test")
     parser.add_argument(
         "-x",
@@ -83,7 +81,6 @@ if __name__ == "__main__":
             CHANNEL_ID = data["channel-id"]
             PREFIX = data["command-prefix"]
 
-        # Who knows why the fuck this is necessary
         bot = dc.AlfredBotDiscord(command_prefix=PREFIX, intents=discord.Intents.all())
         bot.remove_command("help")
         bot.run(BOT_TOKEN)
@@ -97,7 +94,7 @@ if __name__ == "__main__":
         # either let the user enter the details
         # or read them from the config file
         if args.interactive:
-            logging.info("Running in interactivemode...")
+            logging.info("Running in interactive mode...")
             XMPP_SERVER = input("xmpp-server address: ")
             XMPP_USER = input("username: ")
             XMPP_PASS = getpass("Password: ")
