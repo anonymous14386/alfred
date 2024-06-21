@@ -7,9 +7,10 @@
   # https://devenv.sh/packages/
   packages = [ 
     pkgs.git 
+    pkgs.poetry
     # dependencies for the bot
-    pkgs.python312Packages.discordpy
-    pkgs.python312Packages.slixmpp
+    pkgs.python311Packages.discordpy
+    pkgs.python311Packages.slixmpp
   ];
 
   # https://devenv.sh/scripts/
