@@ -1,9 +1,10 @@
-# xmpp functionality 
+# xmpp functionality
 import logging
 from getpass import getpass
 from argparse import ArgumentParser
 
 import slixmpp
+
 
 class AlfredBotXMPP(slixmpp.ClientXMPP):
 
@@ -19,8 +20,8 @@ class AlfredBotXMPP(slixmpp.ClientXMPP):
         await self.get_roster()
 
     async def message(self, msg):
-        if msg['type'] in ('chat', 'normal'):
+        if msg["type"] in ("chat", "normal"):
             msg.repy("%(body)s" % msg).send()
 
-    
-    
+    def run():
+        pass

@@ -2,8 +2,11 @@
 import asyncio
 import json
 import discord
-from discord.ext import commands
+import slixmpp
+import logging
 import random
+
+from discord.ext import commands
 from urllib.request import urlopen
 
 
@@ -52,7 +55,7 @@ colorsForTypes = {
 
 @bot.event
 async def on_ready():
-    print("Alfred online")
+    logging.log(logging.info, "Alfred online on discord!")
     channel = bot.get_channel(CHANNEL_ID)
 
 
@@ -148,7 +151,7 @@ async def poke(ctx, arg):
         print("Number: " + pokeNumberData)
         print("Type: " + pokeTypeData[query])
         print("You entered: " + pokeNumberData + " and it was numeric")
-    # /debug
+        # /debug
 
     else:
         inLower = uInput.lower()
@@ -174,7 +177,7 @@ async def poke(ctx, arg):
         print("Number: " + str(pokeNum))
         print("Name: " + pokeListData[pokeNum - 1])
         print("Type: " + pokeTypeData[pokeNum - 1])
-    # /debug
+        # /debug
 
     embed.set_image(url=image)
     await ctx.send(embed=embed)
@@ -304,5 +307,7 @@ if __name__ == "__main__":
     # - factor out biscord and xmpp into 2 different classes
     # - factor out core bot functions to a single unified class
 
-    print("Starting chat bot...")
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)-8s %(message)s")
+    logging.log(logging.info, "Starting alfred bot ...")
+
     bot.run(BOT_TOKEN)

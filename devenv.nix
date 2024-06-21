@@ -5,13 +5,15 @@
   env.GREET = "devenv";
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git ];
+  packages = with pkgs; [ 
+    git 
+    # dependencies for the bot
+    python312Packages.discordpy
+    python312Packages.slixmpp
+  ];
 
   # https://devenv.sh/scripts/
-  scripts.hello.exec = "echo hello from $GREET";
-
   enterShell = ''
-    hello
     git --version
   '';
 
@@ -31,7 +33,7 @@
   pre-commit.hooks.black.enable = true;
 
   # https://devenv.sh/processes/
-  # processes.ping.exec = "ping example.com";
+  processes.alfredbot.exec = "python3.12 alfred.py";
 
   # See full reference at https://devenv.sh/reference/options/
 }
