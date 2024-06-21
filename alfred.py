@@ -1,4 +1,4 @@
-#Setup stuff
+# Setup stuff
 import asyncio
 import json
 import discord
@@ -11,7 +11,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-#Pull from config
+# Pull from config
 with open("config.json") as f:
     data = json.load(f)
 
@@ -19,125 +19,108 @@ BOT_TOKEN = data["bot-token"]
 CHANNEL_ID = data["channel-id"]
 PREFIX = data["command-prefix"]
 
-#Config data for xmpp
+# Config data for xmpp
 XMPP_SERVER = data["xmpp-server"]
 XMPP_USER = data["xmpp-username"]
 XMPP_PASS = data["xmpp-password"]
 
-#Who knows why the fuck this is necessary
+# Who knows why the fuck this is necessary
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all())
-bot.remove_command('help')
+bot.remove_command("help")
+
+colorsForTypes = {
+    "Grass": 0x007400,
+    "Poison": 0xC000FF,
+    "Fire": 0xFF0000,
+    "Flying": 0x73A7D6,
+    "Water": 0x0071D8,
+    "Bug": 0x579857,
+    "Normal": 0x767676,
+    "Electric": 0xFFFF00,
+    "Ground": 0x675418,
+    "Fairy": 0xFFC0CB,
+    "Fighting": 0x983838,
+    "Psychic": 0xFF3A9C,
+    "Rock": 0xA17950,
+    "Steel": 0xCCCCCC,
+    "Ice": 0x00FFFF,
+    "Ghost": 0x3D47C6,
+    "Dragon": 0x8087E1,
+    "Dark": 0x3E1F00,
+}
+
 
 @bot.event
 async def on_ready():
     print("Alfred online")
     channel = bot.get_channel(CHANNEL_ID)
 
+
 @bot.command()
 async def info(ctx):
     help = discord.Embed(title="Help:")
 
-    help.add_field(name="Command prefix: ~", value="Please put this before the request", inline = False)
+    help.add_field(
+        name="Command prefix: ~",
+        value="Please put this before the request",
+        inline=False,
+    )
 
-    help.add_field(name="Pokedex commands:", value="poke rand: Returns a random pokemon\npoke (num or name): Returns a specific pokemon", inline=False)
+    help.add_field(
+        name="Pokedex commands:",
+        value="poke rand: Returns a random pokemon\npoke (num or name): Returns a specific pokemon",
+        inline=False,
+    )
 
-    help.add_field(name="Tarot commands:", value="tarot(x): Returns x amount of Tarot cards", inline=False)
+    help.add_field(
+        name="Tarot commands:",
+        value="tarot(x): Returns x amount of Tarot cards",
+        inline=False,
+    )
 
     await ctx.send(embed=help)
 
 
 @bot.command()
-async def poke(ctx,arg):
+async def poke(ctx, arg):
 
     pokeLowerList = open("nameLower.txt", "r")
     pokeLowerListDatat = pokeLowerList.read()
-    pokeLowerListData = pokeLowerListDatat.split(',')
+    pokeLowerListData = pokeLowerListDatat.split(",")
 
     pokeList = open("name.txt", "r")
     pokeListDatat = pokeList.read()
-    pokeListData = pokeListDatat.split(',')
+    pokeListData = pokeListDatat.split(",")
 
     pokeTypeList = open("type.txt", "r")
     pokeTypeDatat = pokeTypeList.read()
-    pokeTypeData = pokeTypeDatat.split(',')
+    pokeTypeData = pokeTypeDatat.split(",")
 
     uInput = arg
-
-
     if uInput.isnumeric():
         pokeNumberData = str(uInput).zfill(3)
 
-        query = (int(pokeNumberData) - 1)
+        query = int(pokeNumberData) - 1
 
-        pokeTypeSplit = pokeTypeData[query].split(' | ')
+        pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        if firstType.strip() == "Grass":
-            typeColor = 0x007400
+        typeColor = colorsForTypes(firstType.strip())
 
-        elif firstType.strip() == "Poison":
-            typeColor = 0xC000FF
-
-        elif firstType.strip() == "Fire":
-            typeColor = 0xFF0000
-
-        elif firstType.strip() == "Flying":
-            typeColor = 0x73A7D6
-
-        elif firstType.strip() == "Water":
-            typeColor = 0x0071D8
-
-        elif firstType.strip() == "Bug":
-            typeColor = 0x579857
-
-        elif firstType.strip() == "Normal":
-            typeColor = 0x767676
-
-        elif firstType.strip() == "Electric":
-            typeColor = 0xFFFF00
-
-        elif firstType.strip() == "Ground":
-            typeColor = 0x675418
-
-        elif firstType.strip() == "Fairy":
-            typeColor = 0xFFC0CB
-
-        elif firstType.strip() == "Fighting":
-            typeColor = 0x983838
-
-        elif firstType.strip() == "Psychic":
-            typeColor = 0xFF3A9C
-
-        elif firstType.strip() == "Rock":
-            typeColor = 0xA17950
-
-        elif firstType.strip() == "Steel":
-            typeColor = 0xCCCCCC
-
-        elif firstType.strip() == "Ice":
-            typeColor = 0x00FFFF
-
-        elif firstType.strip() == "Ghost":
-            typeColor = 0x3D47C6
-
-        elif firstType.strip() == "Dragon":
-            typeColor = 0x8087E1
-
-        elif firstType.strip() == "Dark":
-            typeColor = 0x3E1F00
-
-        image = 'https://www.serebii.net/pokemon/art/' + pokeNumberData + '.png'
+        image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
         embed = discord.Embed(colour=typeColor)
-        embed.add_field(name=pokeListData[query], value="Type: " + pokeTypeData[query] + "\nNumber: " + pokeNumberData)
+        embed.add_field(
+            name=pokeListData[query],
+            value="Type: " + pokeTypeData[query] + "\nNumber: " + pokeNumberData,
+        )
 
-#debug
-        print (query)
-        print ("Name: " + pokeListData[query])
-        print ("Number: " + pokeNumberData)
-        print ("Type: " + pokeTypeData[query])
+        # debug
+        print(query)
+        print("Name: " + pokeListData[query])
+        print("Number: " + pokeNumberData)
+        print("Type: " + pokeTypeData[query])
         print("You entered: " + pokeNumberData + " and it was numeric")
-#/debug
-
+    # /debug
 
     elif uInput.lower() == "rand":
 
@@ -145,174 +128,74 @@ async def poke(ctx,arg):
 
         pokeNumberData = str(randNum).zfill(3)
 
-        query = (int(pokeNumberData) - 1)
+        query = int(pokeNumberData) - 1
 
-        #embed color by type
+        # embed color by type
 
-        pokeTypeSplit = pokeTypeData[query].split(' | ')
+        pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        if firstType.strip() == "Grass":
-            typeColor = 0x007400
+        typeColor = colorsForTypes(firstType.strip())
 
-        elif firstType.strip() == "Poison":
-            typeColor = 0xC000FF
-
-        elif firstType.strip() == "Fire":
-            typeColor = 0xFF0000
-
-        elif firstType.strip() == "Flying":
-            typeColor = 0x73A7D6
-
-        elif firstType.strip() == "Water":
-            typeColor = 0x0071D8
-
-        elif firstType.strip() == "Bug":
-            typeColor = 0x579857
-
-        elif firstType.strip() == "Normal":
-            typeColor = 0x767676
-
-        elif firstType.strip() == "Electric":
-            typeColor = 0xFFFF00
-
-        elif firstType.strip() == "Ground":
-            typeColor = 0x675418
-
-        elif firstType.strip() == "Fairy":
-            typeColor = 0xFFC0CB
-
-        elif firstType.strip() == "Fighting":
-            typeColor = 0x983838
-
-        elif firstType.strip() == "Psychic":
-            typeColor = 0xFF3A9C
-
-        elif firstType.strip() == "Rock":
-            typeColor = 0xA17950
-
-        elif firstType.strip() == "Steel":
-            typeColor = 0xCCCCCC
-
-        elif firstType.strip() == "Ice":
-            typeColor = 0x00FFFF
-
-        elif firstType.strip() == "Ghost":
-            typeColor = 0x3D47C6
-
-        elif firstType.strip() == "Dragon":
-            typeColor = 0x8087E1
-
-        elif firstType.strip() == "Dark":
-            typeColor = 0x3E1F00
-
-
-        image = 'https://www.serebii.net/pokemon/art/' + pokeNumberData + '.png'
+        image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
         embed = discord.Embed(colour=typeColor)
-        embed.add_field(name=pokeListData[query], value="Type: " + pokeTypeData[query] + "\nNumber: " + pokeNumberData)
+        embed.add_field(
+            name=pokeListData[query],
+            value="Type: " + pokeTypeData[query] + "\nNumber: " + pokeNumberData,
+        )
 
-#debug
-        print (query)
-        print ("Name: " + pokeListData[query])
-        print ("Number: " + pokeNumberData)
-        print ("Type: " + pokeTypeData[query])
+        # debug
+        print(query)
+        print("Name: " + pokeListData[query])
+        print("Number: " + pokeNumberData)
+        print("Type: " + pokeTypeData[query])
         print("You entered: " + pokeNumberData + " and it was numeric")
-#/debug
+    # /debug
 
     else:
         inLower = uInput.lower()
-        pokeNum = (pokeLowerListData.index(inLower) + 1)
+        pokeNum = pokeLowerListData.index(inLower) + 1
         pokeNumberData = str(pokeNum).zfill(3)
 
-        query = (int(pokeNumberData) - 1)
+        query = int(pokeNumberData) - 1
 
-        #embed color by type
+        # embed color by type
 
-        pokeTypeSplit = pokeTypeData[query].split(' | ')
+        pokeTypeSplit = pokeTypeData[query].split(" | ")
         firstType = pokeTypeSplit[0]
 
-        if firstType.strip() == "Grass":
-            typeColor = 0x007400
+        typeColor = colorsForTypes(firstType.strip())
 
-        elif firstType.strip() == "Poison":
-            typeColor = 0xC000FF
-
-        elif firstType.strip() == "Fire":
-            typeColor = 0xFF0000
-
-        elif firstType.strip() == "Flying":
-            typeColor = 0x73A7D6
-
-        elif firstType.strip() == "Water":
-            typeColor = 0x0071D8
-
-        elif firstType.strip() == "Bug":
-            typeColor = 0x579857
-
-        elif firstType.strip() == "Normal":
-            typeColor = 0x767676
-
-        elif firstType.strip() == "Electric":
-            typeColor = 0xFFFF00
-
-        elif firstType.strip() == "Ground":
-            typeColor = 0x675418
-
-        elif firstType.strip() == "Fairy":
-            typeColor = 0xFFC0CB
-
-        elif firstType.strip() == "Fighting":
-            typeColor = 0x983838
-
-        elif firstType.strip() == "Psychic":
-            typeColor = 0xFF3A9C
-
-        elif firstType.strip() == "Rock":
-            typeColor = 0xA17950
-
-        elif firstType.strip() == "Steel":
-            typeColor = 0xCCCCCC
-
-        elif firstType.strip() == "Ice":
-            typeColor = 0x00FFFF
-
-        elif firstType.strip() == "Ghost":
-            typeColor = 0x3D47C6
-
-        elif firstType.strip() == "Dragon":
-            typeColor = 0x8087E1
-
-        elif firstType.strip() == "Dark":
-            typeColor = 0x3E1F00
-
-        image = 'https://www.serebii.net/pokemon/art/' + str(pokeNumberData) + '.png'
+        image = "https://www.serebii.net/pokemon/art/" + str(pokeNumberData) + ".png"
         embed = discord.Embed(colour=typeColor)
-        embed.add_field(name=pokeListData[query], value="Type: " + pokeTypeData[query] + "\nNumber: " + pokeNumberData)
+        embed.add_field(
+            name=pokeListData[query],
+            value="Type: " + pokeTypeData[query] + "\nNumber: " + pokeNumberData,
+        )
 
-#debug
-        print ("Number: " + str(pokeNum))
-        print ("Name: " + pokeListData[pokeNum - 1])
-        print ("Type: " + pokeTypeData[pokeNum - 1])
-#/debug
+        # debug
+        print("Number: " + str(pokeNum))
+        print("Name: " + pokeListData[pokeNum - 1])
+        print("Type: " + pokeTypeData[pokeNum - 1])
+    # /debug
 
     embed.set_image(url=image)
-    await ctx.send(embed = embed)
+    await ctx.send(embed=embed)
 
 
 @bot.command()
 async def tarot(ctx, amount: int):
 
-
     tarot = open("tarotDesc.txt", "r")
     tarotDB = tarot.read()
 
     for i in range(amount):
-        name="Tarot card name here"
-        description="Description"
-        #156 cards
-        suit=random.randint(1,5)
+        name = "Tarot card name here"
+        description = "Description"
+        # 156 cards
+        suit = random.randint(1, 5)
         if suit != 1:
-            card = random.randint(1,14)
+            card = random.randint(1, 14)
             if card == 1:
                 pre = "Ace of"
             elif card == 2:
@@ -343,7 +226,7 @@ async def tarot(ctx, amount: int):
                 pre = "King of"
 
         else:
-            card = random.randint(1,21)
+            card = random.randint(1, 21)
             if card == 1:
                 name = "The Fool"
             elif card == 2:
@@ -387,11 +270,11 @@ async def tarot(ctx, amount: int):
             elif card == 21:
                 name = "Judgement"
             elif card == 22:
-                name ="The World"
+                name = "The World"
 
         if suit == 2:
             suit = "swords"
-        elif suit ==3:
+        elif suit == 3:
             suit = "cups"
         elif suit == 4:
             suit = "coins"
@@ -400,29 +283,27 @@ async def tarot(ctx, amount: int):
         else:
             suit = "other"
 
-        pos=random.randint(1,2)
+        pos = random.randint(1, 2)
         if pos == 1:
             position = "regular"
         else:
             position = "reversed"
 
-        print("Suit: ", suit,  " Card: ",  card,  " Position: ",  position)
+        print("Suit: ", suit, " Card: ", card, " Position: ", position)
 
-        #1-22 misc
-        #24-37 swords
-        #39-52 cups
-        #55-68 coins
-        #70-83 wands
-
-
+        # 1-22 misc
+        # 24-37 swords
+        # 39-52 cups
+        # 55-68 coins
+        # 70-83 wands
 
 
 if __name__ == "__main__":
 
-    # TODO: 
+    # TODO:
     # - add argparser here
     # - replace print with proper logging
-    # - make 2 threads for both discord and the xmpp bot 
+    # - make 2 threads for both discord and the xmpp bot
     # - factor out biscord and xmpp into 2 different classes
     # - factor out core bot functions to a single unified class
 
