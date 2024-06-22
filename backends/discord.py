@@ -140,53 +140,7 @@ async def poke(ctx, arg):
 
 @commands.command()
 async def tarot(ctx, amount: int):
-
-    with open("data/cards.json") as f:
-        cardData = json.load(f)
-
-    # Pull image links
-    with open("data/images.json") as f:
-        imageData = json.load(f)
-
-    for i in range(amount):
-
-        # 0-77
-        num = random.randint(0, 77)
-
-        card = cardData[str(num)]
-
-        pos = random.randint(0, 1)
-        # print ()
-        # print (pos)
-        # print(num)
-        # print(card)
-        cardParts = card.split("|")
-
-        # print("File: " + fileName)
-
-        name = cardParts[1]
-        # print("Name:" + name)
-
-        poseDescs = cardParts[2].split(";")
-
-        if pos == 0:
-            description = poseDescs[0]
-            fileName = cardParts[0] + ".jpg"
-        else:
-            description = poseDescs[1]
-            name = name + " Reversed"
-            fileName = cardParts[0] + "r.jpg"
-
-        print("Title: " + name)
-        print("Desc: " + description)
-        print("File: " + fileName)
-
-        image = imageData[str(num)]
-
-        cardEmbed = discord.Embed(title=name, description=description, colour=0xC000FF)
-        cardEmbed.set_image(url=image)
-
-        await ctx.send(embed=cardEmbed)
+    await ctx.send(embed=tr.pickTarotCards(amount))
 
 
 class AlfredBotDiscord(discord.ext.commands.Bot):
