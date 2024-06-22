@@ -6,6 +6,8 @@ import slixmpp
 import logging
 import random
 
+#testr= git
+
 from discord.ext import commands
 from urllib.request import urlopen
 from argparse import ArgumentParser
