@@ -300,6 +300,10 @@ async def tarot(ctx, amount: int):
     with open("cards.json") as f:
         cardData = json.load(f)
 
+    # Pull image links
+    with open("images.json") as f:
+        imageData = json.load(f)
+
     for i in range(amount):
 
         # 0-77
