@@ -297,11 +297,11 @@ async def poke(ctx, arg):
 @commands.command()
 async def tarot(ctx, amount: int):
 
-    with open("cards.json") as f:
+    with open("data/cards.json") as f:
         cardData = json.load(f)
 
     # Pull image links
-    with open("images.json") as f:
+    with open("data/images.json") as f:
         imageData = json.load(f)
 
     for i in range(amount):
