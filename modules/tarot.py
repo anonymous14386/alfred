@@ -1,76 +1,53 @@
 import logging
 import random
+import json
+
+from discord import Embed
+from pathlib import Path
 
 
-CARD_SUIT = [
-    "Ace of",
-    "Two of",
-    "Three of",
-    "Four of",
-    "Five of",
-    "Six of",
-    "Seven of",
-    "Eight of",
-    "Nine of",
-    "Ten of",
-    "Page of",
-    "Knight of",
-    "Queen of",
-    "King of",
-]
+def pickTarotCards(amount: int) -> [Embed]:
+    cardJson = Path("data/cards.json")
+    if not cardJson.exists():
+        logging.error("Failed to open cards.json!!!")
 
-CARD_SPECIAL = [
-    "The Fool",
-    "The Magician",
-    "The High Priestess",
-    "The Empress",
-    "The Emperor",
-    "The Hierophant",
-    "The Lovers",
-    "The Chariot",
-    "Strenght",
-    "The Hermit",
-    "Wheel of Fortune",
-    "Justice",
-    "The Hanged Man",
-    "Death",
-    "Temperance",
-    "The Devil",
-    "The Tower",
-    "The Star",
-    "The Moon",
-    "The Sun",
-    "Judgement",
-    "The World",
-]
+    imagesJson = Path("data/images.json")
+    if not imagesJson.exists():
+        logging.error("Failed to open images.json!!!")
 
+    with open(cardJson) as f:
+        cardData = json.load(f)
 
-def pickTarotCards(amount: int):
+    with open(imagesJson) as f:
+        imageData = json.load(f)
 
-    for index in range(amount):
-        suit = random.randint(1, 5)
-        if suit != 1:
-            card = random.randint(1, 14)
-            pre = CARD_SUIT[card]
+    cardArray = []
+
+    for i in range(amount):
+        num = random.randint(0, 77)
+        card = cardData[str(num)]
+        pos = random.randint(0, 1)
+        cardParts = card.split("|")
+        name = cardParts[1]
+        poseDescs = cardParts[2].split(";")
+
+        if pos == 0:
+            description = poseDescs[0]
+            fileName = cardParts[0] + ".jpg"
         else:
-            card = random.randint(1, 21)
-            name = CARD_SPECIAL[card]
+            description = poseDescs[1]
+            name = name + " Reversed"
+            fileName = cardParts[0] + "r.jpg"
 
-        if suit == 2:
-            suit = "swords"
-        elif suit == 3:
-            suit = "cups"
-        elif suit == 4:
-            suit = "coins"
-        elif suit == 5:
-            suit = "wands"
-        else:
-            suit = "other"
+        logging.debug("Title: " + name)
+        logging.debug("Desc: " + description)
+        logging.debug("File: " + fileName)
 
-        pos = random.randint(1, 2)
-        if pos == 1:
-            position = "regular"
-        else:
-            position = "reversed"
+        image = imageData[str(num)]
 
-        print("Suit: ", suit, " Card: ", card, " Position: ", position)
+        cardEmbed = Embed(title=name, description=description, colour=0xC000FF)
+        cardEmbed.set_image(url=image)
+
+        cardArray.append(cardEmbed)
+
+    return cardArray

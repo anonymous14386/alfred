@@ -5,6 +5,7 @@ import json
 
 from discord.ext import commands
 
+import modules.pokemon as pk
 import modules.tarot as tr
 
 CHANNEL_ID = "test"
@@ -58,63 +59,10 @@ async def poke(ctx, arg):
         query = int(pokeNumberData) - 1
 
         pokeTypeSplit = pokeTypeData[query].split(" | ")
-        firstType = pokeTypeSplit[0]
+        firstType = pokeTypeSplit[0].split()
 
-        if firstType.strip() == "Grass":
-            typeColor = 0x007400
-
-        elif firstType.strip() == "Poison":
-            typeColor = 0xC000FF
-
-        elif firstType.strip() == "Fire":
-            typeColor = 0xFF0000
-
-        elif firstType.strip() == "Flying":
-            typeColor = 0x73A7D6
-
-        elif firstType.strip() == "Water":
-            typeColor = 0x0071D8
-
-        elif firstType.strip() == "Bug":
-            typeColor = 0x579857
-
-        elif firstType.strip() == "Normal":
-            typeColor = 0x767676
-
-        elif firstType.strip() == "Electric":
-            typeColor = 0xFFFF00
-
-        elif firstType.strip() == "Ground":
-            typeColor = 0x675418
-
-        elif firstType.strip() == "Fairy":
-            typeColor = 0xFFC0CB
-
-        elif firstType.strip() == "Fighting":
-            typeColor = 0x983838
-
-        elif firstType.strip() == "Psychic":
-            typeColor = 0xFF3A9C
-
-        elif firstType.strip() == "Rock":
-            typeColor = 0xA17950
-
-        elif firstType.strip() == "Steel":
-            typeColor = 0xCCCCCC
-
-        elif firstType.strip() == "Ice":
-            typeColor = 0x00FFFF
-
-        elif firstType.strip() == "Ghost":
-            typeColor = 0x3D47C6
-
-        elif firstType.strip() == "Dragon":
-            typeColor = 0x8087E1
-
-        elif firstType.strip() == "Dark":
-            typeColor = 0x3E1F00
-
-        image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
+        typeColor = pk.getEmbedColor(firstType)
+        image = pk.getImageUrl(pokeNumberData)
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
             name=pokeListData[query],
@@ -122,12 +70,12 @@ async def poke(ctx, arg):
         )
 
         # debug
-        print(query)
-        print("Name: " + pokeListData[query])
-        print("Number: " + pokeNumberData)
-        print("Type: " + pokeTypeData[query])
-        print("You entered: " + pokeNumberData + " and it was numeric")
-    # /debug
+        logging.debug(query)
+        logging.debug("Name: " + pokeListData[query])
+        logging.debug("Number: " + pokeNumberData)
+        logging.debug("Type: " + pokeTypeData[query])
+        logging.debug("You entered: " + pokeNumberData + " and it was numeric")
+        # /debug
 
     elif uInput.lower() == "rand":
 
@@ -140,63 +88,11 @@ async def poke(ctx, arg):
         # embed color by type
 
         pokeTypeSplit = pokeTypeData[query].split(" | ")
-        firstType = pokeTypeSplit[0]
+        firstType = pokeTypeSplit[0].strip()
 
-        if firstType.strip() == "Grass":
-            typeColor = 0x007400
+        typeColor = pk.getEmbedColor(firstType)
+        image = pk.getImageUrl(pokeNumberData)
 
-        elif firstType.strip() == "Poison":
-            typeColor = 0xC000FF
-
-        elif firstType.strip() == "Fire":
-            typeColor = 0xFF0000
-
-        elif firstType.strip() == "Flying":
-            typeColor = 0x73A7D6
-
-        elif firstType.strip() == "Water":
-            typeColor = 0x0071D8
-
-        elif firstType.strip() == "Bug":
-            typeColor = 0x579857
-
-        elif firstType.strip() == "Normal":
-            typeColor = 0x767676
-
-        elif firstType.strip() == "Electric":
-            typeColor = 0xFFFF00
-
-        elif firstType.strip() == "Ground":
-            typeColor = 0x675418
-
-        elif firstType.strip() == "Fairy":
-            typeColor = 0xFFC0CB
-
-        elif firstType.strip() == "Fighting":
-            typeColor = 0x983838
-
-        elif firstType.strip() == "Psychic":
-            typeColor = 0xFF3A9C
-
-        elif firstType.strip() == "Rock":
-            typeColor = 0xA17950
-
-        elif firstType.strip() == "Steel":
-            typeColor = 0xCCCCCC
-
-        elif firstType.strip() == "Ice":
-            typeColor = 0x00FFFF
-
-        elif firstType.strip() == "Ghost":
-            typeColor = 0x3D47C6
-
-        elif firstType.strip() == "Dragon":
-            typeColor = 0x8087E1
-
-        elif firstType.strip() == "Dark":
-            typeColor = 0x3E1F00
-
-        image = "https://www.serebii.net/pokemon/art/" + pokeNumberData + ".png"
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
             name=pokeListData[query],
@@ -204,12 +100,12 @@ async def poke(ctx, arg):
         )
 
         # debug
-        print(query)
-        print("Name: " + pokeListData[query])
-        print("Number: " + pokeNumberData)
-        print("Type: " + pokeTypeData[query])
-        print("You entered: " + pokeNumberData + " and it was numeric")
-    # /debug
+        logging.debug(query)
+        logging.debug("Name: " + pokeListData[query])
+        logging.debug("Number: " + pokeNumberData)
+        logging.debug("Type: " + pokeTypeData[query])
+        logging.debug("You entered: " + pokeNumberData + " and it was numeric")
+        # /debug
 
     else:
         inLower = uInput.lower()
@@ -221,63 +117,11 @@ async def poke(ctx, arg):
         # embed color by type
 
         pokeTypeSplit = pokeTypeData[query].split(" | ")
-        firstType = pokeTypeSplit[0]
+        firstType = pokeTypeSplit[0].strip()
 
-        if firstType.strip() == "Grass":
-            typeColor = 0x007400
+        typeColor = pk.getEmbedColor(firstType)
+        image = pk.getImageUrl(pokeNumberData)
 
-        elif firstType.strip() == "Poison":
-            typeColor = 0xC000FF
-
-        elif firstType.strip() == "Fire":
-            typeColor = 0xFF0000
-
-        elif firstType.strip() == "Flying":
-            typeColor = 0x73A7D6
-
-        elif firstType.strip() == "Water":
-            typeColor = 0x0071D8
-
-        elif firstType.strip() == "Bug":
-            typeColor = 0x579857
-
-        elif firstType.strip() == "Normal":
-            typeColor = 0x767676
-
-        elif firstType.strip() == "Electric":
-            typeColor = 0xFFFF00
-
-        elif firstType.strip() == "Ground":
-            typeColor = 0x675418
-
-        elif firstType.strip() == "Fairy":
-            typeColor = 0xFFC0CB
-
-        elif firstType.strip() == "Fighting":
-            typeColor = 0x983838
-
-        elif firstType.strip() == "Psychic":
-            typeColor = 0xFF3A9C
-
-        elif firstType.strip() == "Rock":
-            typeColor = 0xA17950
-
-        elif firstType.strip() == "Steel":
-            typeColor = 0xCCCCCC
-
-        elif firstType.strip() == "Ice":
-            typeColor = 0x00FFFF
-
-        elif firstType.strip() == "Ghost":
-            typeColor = 0x3D47C6
-
-        elif firstType.strip() == "Dragon":
-            typeColor = 0x8087E1
-
-        elif firstType.strip() == "Dark":
-            typeColor = 0x3E1F00
-
-        image = "https://www.serebii.net/pokemon/art/" + str(pokeNumberData) + ".png"
         embed = discord.Embed(colour=typeColor)
         embed.add_field(
             name=pokeListData[query],
@@ -285,10 +129,10 @@ async def poke(ctx, arg):
         )
 
         # debug
-        print("Number: " + str(pokeNum))
-        print("Name: " + pokeListData[pokeNum - 1])
-        print("Type: " + pokeTypeData[pokeNum - 1])
-    # /debug
+        logging.debug("Number: " + str(pokeNum))
+        logging.debug("Name: " + pokeListData[pokeNum - 1])
+        logging.debug("Type: " + pokeTypeData[pokeNum - 1])
+        # /debug
 
     embed.set_image(url=image)
     await ctx.send(embed=embed)
@@ -296,53 +140,8 @@ async def poke(ctx, arg):
 
 @commands.command()
 async def tarot(ctx, amount: int):
-
-    with open("cards.json") as f:
-        cardData = json.load(f)
-
-    # Pull image links
-    with open("images.json") as f:
-        imageData = json.load(f)
-
-    for i in range(amount):
-
-        # 0-77
-        num = random.randint(0, 77)
-
-        card = cardData[str(num)]
-
-        pos = random.randint(0, 1)
-        # print ()
-        # print (pos)
-        # print(num)
-        # print(card)
-        cardParts = card.split("|")
-
-        # print("File: " + fileName)
-
-        name = cardParts[1]
-        # print("Name:" + name)
-
-        poseDescs = cardParts[2].split(";")
-
-        if pos == 0:
-            description = poseDescs[0]
-            fileName = cardParts[0] + ".jpg"
-        else:
-            description = poseDescs[1]
-            name = name + " Reversed"
-            fileName = cardParts[0] + "r.jpg"
-
-        print("Title: " + name)
-        print("Desc: " + description)
-        print("File: " + fileName)
-
-        image = imageData[str(num)]
-
-        cardEmbed = discord.Embed(title=name, description=description, colour=0xC000FF)
-        cardEmbed.set_image(url=image)
-
-        await ctx.send(embed=cardEmbed)
+    for card in tr.pickTarotCards(amount):
+        await ctx.send(embed=card)
 
 
 class AlfredBotDiscord(discord.ext.commands.Bot):
