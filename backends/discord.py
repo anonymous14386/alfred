@@ -59,7 +59,7 @@ async def poke(ctx, arg):
         query = int(pokeNumberData) - 1
 
         pokeTypeSplit = pokeTypeData[query].split(" | ")
-        firstType = pokeTypeSplit[0]
+        firstType = pokeTypeSplit[0].split()
 
         typeColor = pk.getEmbedColor(firstType)
         image = pk.getImageUrl(pokeNumberData)
@@ -88,7 +88,7 @@ async def poke(ctx, arg):
         # embed color by type
 
         pokeTypeSplit = pokeTypeData[query].split(" | ")
-        firstType = pokeTypeSplit[0]
+        firstType = pokeTypeSplit[0].strip()
 
         typeColor = pk.getEmbedColor(firstType)
         image = pk.getImageUrl(pokeNumberData)
@@ -117,7 +117,7 @@ async def poke(ctx, arg):
         # embed color by type
 
         pokeTypeSplit = pokeTypeData[query].split(" | ")
-        firstType = pokeTypeSplit[0]
+        firstType = pokeTypeSplit[0].strip()
 
         typeColor = pk.getEmbedColor(firstType)
         image = pk.getImageUrl(pokeNumberData)
