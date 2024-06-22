@@ -12,6 +12,7 @@
     pkgs.python311Packages.discordpy
     pkgs.python311Packages.slixmpp
     pkgs.python311Packages.duckdb
+    pkgs.python311Packages.openai
   ];
 
   # https://devenv.sh/scripts/
