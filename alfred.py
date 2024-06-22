@@ -82,7 +82,8 @@ if __name__ == "__main__":
             PREFIX = data["command-prefix"]
 
         bot = dc.AlfredBotDiscord(command_prefix=PREFIX, intents=discord.Intents.all())
-        bot.remove_command("help")
+        # bot.remove_command("help")
+        bot.setup()
         bot.run(BOT_TOKEN)
 
     else:
