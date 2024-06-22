@@ -6,8 +6,7 @@ from discord import Embed
 from pathlib import Path
 
 
-def pickTarotCards(amount: int) -> Embed:
-
+def pickTarotCards(amount: int) -> [Embed]:
     cardJson = Path("data/cards.json")
     if not cardJson.exists():
         logging.error("Failed to open cards.json!!!")
@@ -16,8 +15,13 @@ def pickTarotCards(amount: int) -> Embed:
     if not imagesJson.exists():
         logging.error("Failed to open images.json!!!")
 
-    cardData = json.load(cardJson)
-    imageData = json.load(imagesJson)
+    with open(cardJson) as f:
+        cardData = json.load(f)
+
+    with open(imagesJson) as f:
+        imageData = json.load(f)
+
+    cardArray = []
 
     for i in range(amount):
         num = random.randint(0, 77)
@@ -25,7 +29,7 @@ def pickTarotCards(amount: int) -> Embed:
         pos = random.randint(0, 1)
         cardParts = card.split("|")
         name = cardParts[1]
-        poseDecs = cardParts[2].split(";")
+        poseDescs = cardParts[2].split(";")
 
         if pos == 0:
             description = poseDescs[0]
@@ -41,7 +45,9 @@ def pickTarotCards(amount: int) -> Embed:
 
         image = imageData[str(num)]
 
-        cardEmbed = discord.Embed(title=name, description=description, colour=0xC000FF)
+        cardEmbed = Embed(title=name, description=description, colour=0xC000FF)
         cardEmbed.set_image(url=image)
 
-        return cardEmbed
+        cardArray.append(cardEmbed)
+
+    return cardArray

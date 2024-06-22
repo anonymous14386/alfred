@@ -140,7 +140,8 @@ async def poke(ctx, arg):
 
 @commands.command()
 async def tarot(ctx, amount: int):
-    await ctx.send(embed=tr.pickTarotCards(amount))
+    for card in tr.pickTarotCards(amount):
+        await ctx.send(embed=card)
 
 
 class AlfredBotDiscord(discord.ext.commands.Bot):
