@@ -1,6 +1,8 @@
 import logging
 import random
 
+import data.db
+
 COLORS_FOR_POKE_TYPES = {
     "Grass": 0x007400,
     "Poison": 0xC000FF,
