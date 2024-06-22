@@ -13,6 +13,8 @@
     pkgs.python311Packages.slixmpp
     pkgs.python311Packages.duckdb
     pkgs.python311Packages.openai
+    pkgs.python311Packages.pillow
+    pkgs.python311Packages.numpy
   ];
 
   # https://devenv.sh/scripts/

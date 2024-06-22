@@ -7,6 +7,10 @@ from pathlib import Path
 
 
 def pickTarotCards(amount: int) -> [Embed]:
+    """
+    Picks one through n tarot cards and generates a discord embed for them
+    TODO: refactor this code so that it can be used by both disccord and the xmpp bot
+    """
     cardJson = Path("data/cards.json")
     if not cardJson.exists():
         logging.error("Failed to open cards.json!!!")

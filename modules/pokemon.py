@@ -1,6 +1,9 @@
 import logging
 import random
 
+from PIL import Image
+import numpy as np
+
 import data.db
 
 COLORS_FOR_POKE_TYPES = {
@@ -27,10 +30,20 @@ COLORS_FOR_POKE_TYPES = {
 IMAGE_API_URL = "https://www.serebii.net/pokemon/art"
 
 
+def getAverageColor(imagePath: str) -> int:
+    image = Image.Open(imagePath)
+    imageArray = np.array(image)
+    averageCol = np.mean(imageArray, axis=(0, 1)).astype(int)
+
+    return averageCol
+
+
 def getEmbedColor(pokemonType: str) -> int:
     """
     Get the embed color for the specified pokemon type
     """
+    # FIXME: download the image and then
+    # calculate the averate color automatically instead of looking it up in the dict
     return COLORS_FOR_POKE_TYPES[pokemonType]
 
 
@@ -46,9 +59,8 @@ def loadData(dataFolder: str) -> bool:
     """
     Load all the text files
     """
-    pokeLowerList = open("%s/nameLower.txt" % dataFolder, "r")
-
-    pass
+    pokeLowerListFile = open("%s/nameLower.txt" % dataFolder, "r")
+    pokeLowerList = pokeLowerListFile.read().split(",")
 
 
 def getRandomPokemon() -> (str, int):
@@ -62,7 +74,7 @@ def getRandomPokemon() -> (str, int):
     query = int(pokeNumberData) - 1
 
     imgUrl = getImageUrl(pokeNumberData)
-    embedColor = getEmbedColor("grass")
+    embedColor = getEmbedColor("Grass")
 
     logging.debug("imgurl %s and embed color %x" % imgUrl, embedColor)
 
